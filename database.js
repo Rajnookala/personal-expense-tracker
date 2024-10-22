@@ -2,11 +2,11 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'postgres', // your PostgreSQL username
+  user: 'postgres', 
   host: 'localhost',
-  database: 'expenses', // name of your database
-  password: 'postgres', // replace with your PostgreSQL password
-  port: 5432, // default PostgreSQL port
+  database: 'expenses', 
+  password: 'postgres', 
+  port: 5432, 
 });
 
 // Function to create tables
