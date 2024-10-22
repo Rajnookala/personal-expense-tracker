@@ -12,15 +12,15 @@ app.use(bodyParser.json());
 
 // Database setup
 const pool = new Pool({
-  user: 'postgres', // your PostgreSQL username
+  user: 'postgres', 
   host: 'localhost',
-  database: 'expenses', // name of your database
-  password: 'postgres', // replace with your PostgreSQL password
-  port: 5432, // default PostgreSQL port
+  database: 'expenses', 
+  password: 'postgres', 
+  port: 5432, 
 });
 
 // Secret key for JWT
-const JWT_SECRET = 'your_secret_key'; // Change this to a more secure key in production
+const JWT_SECRET = 'your_secret_key'; 
 
 // Middleware for verifying JWT
 const verifyToken = (req, res, next) => {
@@ -31,11 +31,11 @@ const verifyToken = (req, res, next) => {
     return res.status(403).json({ message: 'No token provided or invalid format' });
   }
 
-  const jwtToken = token.split(' ')[1]; // Remove "Bearer " from the token
+  const jwtToken = token.split(' ')[1]; 
 
   jwt.verify(jwtToken, JWT_SECRET, (err, decoded) => {
     if (err) return res.status(500).json({ message: 'Failed to authenticate token' });
-    req.userId = decoded.id; // Save the user ID for later use
+    req.userId = decoded.id; 
     next();
   });
 };
@@ -48,7 +48,7 @@ app.post('/register', async (req, res) => {
     return res.status(400).json({ message: 'Username and password are required' });
   }
 
-  const hashedPassword = bcrypt.hashSync(password, 10); // Hash the password
+  const hashedPassword = bcrypt.hashSync(password, 10); 
 
   const client = await pool.connect();
   try {
@@ -58,7 +58,7 @@ app.post('/register', async (req, res) => {
     );
     res.status(201).json({ id: result.rows[0].id });
   } catch (err) {
-    if (err.code === '23505') { // Unique violation error
+    if (err.code === '23505') { 
       return res.status(409).json({ error: 'Username already exists' });
     }
     res.status(500).json({ error: err.message });
@@ -86,7 +86,7 @@ app.post('/login', async (req, res) => {
 
     // Generate a JWT token
     const token = jwt.sign({ id: row.id, username: row.username }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token: `Bearer ${token}` }); // Return the token with "Bearer" prefix
+    res.json({ token: `Bearer ${token}` }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   } finally {
